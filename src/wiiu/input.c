@@ -13,6 +13,8 @@
 int disable_gamepad = 0;
 int swap_buttons = 0;
 int absolute_positioning = 0;
+int invert_right_stick_x = 0;
+int invert_right_stick_y = 0;
 
 static char lastTouched = 0;
 static char touched = 0;
@@ -150,7 +152,9 @@ void wiiu_input_update(void) {
       (vpad.hold & VPAD_BUTTON_ZL) ? 0xFF : 0,
       (vpad.hold & VPAD_BUTTON_ZR) ? 0xFF : 0,
       vpad.leftStick.x * INT16_MAX, vpad.leftStick.y * INT16_MAX,
-      vpad.rightStick.x * INT16_MAX, vpad.rightStick.y * INT16_MAX);
+      invert_right_stick_x ? -1*vpad.rightStick.x * INT16_MAX : vpad.rightStick.x * INT16_MAX,
+      invert_right_stick_y ? -1*vpad.rightStick.y * INT16_MAX : vpad.rightStick.y * INT16_MAX);
+      //vpad.rightStick.x * INT16_MAX, vpad.rightStick.y * INT16_MAX);
 
     VPADTouchData touch;
     VPADGetTPCalibratedPoint(VPAD_CHAN_0, &touch, &vpad.tpNormal);
@@ -204,7 +208,9 @@ void wiiu_input_update(void) {
           (kpad_data.pro.hold & WPAD_PRO_TRIGGER_ZL) ? 0xFF : 0,
           (kpad_data.pro.hold & WPAD_PRO_TRIGGER_ZR) ? 0xFF : 0,
           kpad_data.pro.leftStick.x * INT16_MAX, kpad_data.pro.leftStick.y * INT16_MAX,
-          kpad_data.pro.rightStick.x * INT16_MAX, kpad_data.pro.rightStick.y * INT16_MAX);
+          invert_right_stick_x ? -1*kpad_data.pro.rightStick.x * INT16_MAX : kpad_data.pro.rightStick.x * INT16_MAX,
+          invert_right_stick_y ? -1*kpad_data.pro.rightStick.y * INT16_MAX : kpad_data.pro.rightStick.y * INT16_MAX);
+          //kpad_data.pro.rightStick.x * INT16_MAX, kpad_data.pro.rightStick.y * INT16_MAX);
       }
       else if (kpad_data.extensionType == WPAD_EXT_CLASSIC || kpad_data.extensionType == WPAD_EXT_MPLUS_CLASSIC) {
         uint32_t btns = kpad_data.classic.hold;

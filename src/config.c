@@ -37,6 +37,8 @@ extern int disable_gamepad;
 extern int swap_buttons;
 extern int absolute_positioning;
 extern int autostream;
+extern int invert_right_stick_x;
+extern int invert_right_stick_y;
 
 extern ssize_t getline(char **buf, size_t *bufsiz, FILE *fp);
 
@@ -88,6 +90,8 @@ static struct option long_options[] = {
   {"swap_buttons", no_argument, NULL, 'B'},
   {"autostream", no_argument, NULL, 'C'},
   {"absolute_positioning", no_argument, NULL, 'D'},
+  {"invert_right_stick_x", no_argument, NULL, 'X'},
+  {"invert_right_stick_y", no_argument, NULL, 'Y'},
 #endif
   {"nomouseemulation", no_argument, NULL, '4'},
   {"pin", required_argument, NULL, '5'},
@@ -278,6 +282,12 @@ static void parse_argument(int c, char* value, PCONFIGURATION config) {
   case 'D':
     absolute_positioning = true;
     break;
+  case 'X':
+    invert_right_stick_x = true;
+    break;
+  case 'Y':
+    invert_right_stick_y = true;
+    break;
 #endif
   case '4':
     config->mouse_emulation = false;
@@ -446,7 +456,7 @@ void config_parse(int argc, char* argv[], PCONFIGURATION config) {
   } else {
     int option_index = 0;
     int c;
-    while ((c = getopt_long_only(argc, argv, "-abc:d:efg:h:i:j:k:lm:no:p:q:r:s:tu:v:w:xy45:6:", long_options, &option_index)) != -1) {
+    while ((c = getopt_long_only(argc, argv, "-abc:d:efg:h:i:j:k:lm:no:p:q:r:s:tu:v:w:xyXY45:6:", long_options, &option_index)) != -1) {
       parse_argument(c, optarg, config);
     }
   }
